@@ -1,3 +1,5 @@
+package arraysHashing;
+
 import java.util.*;
 
 public class ValidSudoku36 {

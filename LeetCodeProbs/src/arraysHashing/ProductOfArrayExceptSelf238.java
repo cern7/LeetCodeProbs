@@ -1,3 +1,5 @@
+package arraysHashing;
+
 import java.util.Arrays;
 
 public class ProductOfArrayExceptSelf238 {
