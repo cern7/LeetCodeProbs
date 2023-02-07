@@ -1,41 +1,35 @@
 package stack;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 public class EvaluateRPN150 {
     public int evalRPN(String[] tokens) {
         if (tokens.length == 1) {
             return Integer.parseInt(tokens[0]);
         }
-        Deque<Integer> stk = new ArrayDeque<>();
+        int[] stack = new int[tokens.length / 2 + 1];
+        int j = 0;
         for (int i = 0; i < tokens.length; i++) {
-            String t = tokens[i];
-            switch (t) {
+            switch (tokens[i]) {
                 case "+" -> {
-                    int tempSum = stk.pop() + stk.pop();
-                    stk.push(tempSum);
+                    stack[j - 2] += stack[j - 1];
+                    j--;
                 }
                 case "-" -> {
-                    int tempMinus = -stk.pop() + stk.pop();
-                    stk.push(tempMinus);
+                    stack[j - 2] -= stack[j - 1];
+                    j--;
                 }
                 case "*" -> {
-
-                    int tempMult = stk.pop() * stk.pop();
-                    stk.push(tempMult);
+                    stack[j - 2] *= stack[j - 1];
+                    j--;
                 }
                 case "/" -> {
-                    int divisor = stk.pop();
-                    int dividend = stk.pop();
-                    int tempDiv = dividend / divisor;
-                    stk.push(tempDiv);
+                    stack[j - 2] /= stack[j - 1];
+                    j--;
                 }
                 default -> {
-                    stk.push(Integer.parseInt(tokens[i]));
+                    stack[j++] = Integer.parseInt(tokens[i]);
                 }
             }
         }
-        return stk.pop();
+        return stack[0];
     }
 }
