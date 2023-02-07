@@ -1,40 +1,54 @@
 package stack;
 
-import java.util.Deque;
-import java.util.LinkedList;
-
 public class MinStack {
-    private Deque<Integer> internalStack;
-    private Deque<Integer> internalMin;
 
+    class Node {
+        int val;
+        int min;
+        Node next;
+
+        Node(int val, int min, Node next) {
+            this.val = val;
+            this.min = min;
+            this.next = next;
+        }
+
+    }
+
+    int min;
+    Node node;
+    Node head;
 
     public MinStack() {
-        internalStack = new LinkedList<>();
-        internalMin = new LinkedList<>();
     }
 
     public void push(int val) {
-        if (internalMin.isEmpty() || internalMin.peek() > val) {
-            internalMin.push(val);
+        if (head == null) {
+            head = new Node(val, val, head);
+            min = val;
+        } else {
+            int tempMin = min < val ? min : val;
+            head = new Node(val, tempMin, head);
+            min = tempMin;
         }
-        internalStack.push(val);
     }
 
     public void pop() {
-        if (!internalStack.isEmpty()) {
-            int tempMin = internalStack.pop();
-            if (internalMin.peek() == tempMin && !internalStack.contains(tempMin)) {
-                internalMin.pop();
-            }
+        if (head.next != null) {
+            min = head.next.min;
+            head = head.next;
+        } else {
+            head = null;
+            min =-1;
         }
     }
 
     public int top() {
-        return internalStack.peek();
+        return head.val;
     }
 
     public int getMin() {
-        return internalMin.peek();
+        return min;
     }
 
     /**
