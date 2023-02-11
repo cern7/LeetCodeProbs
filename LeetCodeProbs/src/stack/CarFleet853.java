@@ -1,12 +1,12 @@
 package stack;
 
-import java.util.*;
+import java.util.Objects;
 
 public class CarFleet853 {
     public static void main(String[] args) {
-        int target = 10;
-        int[] position = {6, 8};
-        int[] speed = {3, 2};
+        int target = 12;
+        int[] position = {10, 8, 0, 5, 3};
+        int[] speed = {2, 4, 1, 1, 3};
         System.out.println(new CarFleet853().carFleet(target, position, speed));
     }
 
@@ -58,28 +58,49 @@ public class CarFleet853 {
     }
 
     public int carFleet(int target, int[] position, int[] speed) {
-        // push to stack (to create a fleet) if:
-        // 1. speed[i] > speed[stk.peek()] &&
-        // 2. deltaT < time[stk.peek()]
+
+//        int size = position.length;
+//        Car[] cars = new Car[size];
+//        for (int i = 0; i < size; ++i) {
+//            cars[i] = new Car(position[i], speed[i], target);
+//        }
+//        Arrays.sort(cars, Comparator.comparingInt(a -> a.position));
+//
+//        Deque<Integer> stack = new ArrayDeque<>();
+//
+//        for (int i = size - 1; i >= 0; i--) {
+//            stack.push(i);
+//            if (stack.size() > 1) {
+//                int stackPeek = stack.pop();
+//                int stackPeekMinus1 = stack.peek();
+//                if (cars[stackPeek].getTime() > cars[stackPeekMinus1].getTime()) {
+//                    stack.push(stackPeek);
+//                }
+//            }
+//        }
+//        return stack.size();
+
         int size = position.length;
-        Car[] cars = new Car[size];
+        // array with the total number of cars
+        int[] cars = new int[target + 1];
+
+        // assign to each car(if exist) the respective speed
         for (int i = 0; i < size; ++i) {
-            cars[i] = new Car(position[i], speed[i], target);
+            cars[position[i]] = speed[i];
         }
-        Arrays.sort(cars, Comparator.comparingInt(a -> a.position));
-
-        Deque<Integer> stack = new ArrayDeque<>();
-
-        for (int i = size - 1; i >= 0; i--) {
-            stack.push(i);
-            if (stack.size() > 1) {
-                int stackPeek = stack.pop();
-                int stackPeekMinus1 = stack.peek();
-                if (cars[stackPeek].getTime() > cars[stackPeekMinus1].getTime()) {
-                    stack.push(stackPeek);
+        // keep the faster car time for all the cars,
+        // fasterCarTime is the time for the slower car closer to finish
+        float fasterCarTime = -1;
+        int carFleets = 0;
+        for (int i = target; i >= 0; --i) {
+            if (cars[i] != 0) { // if car exists
+                float tempTime = (float) (target - i) / cars[i];
+                if (tempTime > fasterCarTime) { // if time to finish is greater than existing, ++carFleets
+                    ++carFleets;
+                    fasterCarTime = tempTime;
                 }
             }
         }
-        return stack.size();
+        return carFleets;
     }
 }
