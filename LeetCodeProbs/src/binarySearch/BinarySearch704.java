@@ -8,7 +8,6 @@ public class BinarySearch704 {
     }
 
     public int search(int[] nums, int target) {
-
         int result = -1;
         int size = nums.length;
 
@@ -19,11 +18,10 @@ public class BinarySearch704 {
         int r = size - 1;
         while (l <= r) {
             int mid = l + (r - l) / 2;
-            result = mid;
             if (nums[mid] == target) {
                 return mid;
             } else if (nums[mid] < target) {
-                l = mid;
+                l = mid + 1;
             } else {
                 r = mid - 1;
             }
